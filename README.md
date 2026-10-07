@@ -39,5 +39,5 @@ customers, suppliers, purchases and sales, with a dashboard and sales reports.
 
 ## Project structure
 - `src/` : source code (ui, dao, model)
-- `database/setup.sql` : database setup script
+- `database/computer_shop.sql` : database setup script
 - `dist/` : runnable JAR (if included)
