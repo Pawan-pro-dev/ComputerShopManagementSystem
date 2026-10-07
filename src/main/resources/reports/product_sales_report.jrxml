@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" 
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
+              name="product_sales_report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+    
+    <parameter name="PRODUCT_ID" class="java.lang.Integer"/>
+
+    <queryString>
+        <![CDATA[
+            SELECT 
+                p.product_id,
+                p.product_name,
+                s.sale_id,
+                s.sale_date,
+                si.quantity,
+                si.unit_price,
+                (si.quantity * si.unit_price) AS total_item_price
+            FROM sale_item si
+            JOIN product p ON si.product_id = p.product_id
+            JOIN sale s ON si.sale_id = s.sale_id
+            WHERE p.product_id = $P{PRODUCT_ID}
+            ORDER BY s.sale_date DESC
+        ]]>
+    </queryString>
+
+    <field name="product_id" class="java.lang.Integer"/>
+    <field name="product_name" class="java.lang.String"/>
+    <field name="sale_id" class="java.lang.Integer"/>
+    <field name="sale_date" class="java.sql.Timestamp"/>
+    <field name="quantity" class="java.lang.Integer"/>
+    <field name="unit_price" class="java.lang.Double"/>
+    <field name="total_item_price" class="java.lang.Double"/>
+
+    <variable name="TOTAL_PRODUCT_SALES" class="java.lang.Double" calculation="Sum">
+        <variableExpression><![CDATA[$F{total_item_price}]]></variableExpression>
+    </variable>
+
+    <title>
+        <band height="70">
+            <staticText>
+                <reportElement x="0" y="10" width="555" height="30"/>
+                <textElement textAlignment="Center">
+                    <font size="20" isBold="true"/>
+                </textElement>
+                <text><![CDATA[PRODUCT SALES REPORT]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="0" y="45" width="555" height="20"/>
+                <textElement textAlignment="Center">
+                    <font size="12" isItalic="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Product: " + $F{product_name} + " (ID: " + $F{product_id} + ")"]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="25">
+            <staticText>
+                <reportElement x="0" y="0" width="70" height="20"/>
+                <textElement><font isBold="true"/></textElement>
+                <text><![CDATA[Sale ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="70" y="0" width="160" height="20"/>
+                <textElement><font isBold="true"/></textElement>
+                <text><![CDATA[Date & Time]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="230" y="0" width="80" height="20"/>
+                <textElement textAlignment="Center"><font isBold="true"/></textElement>
+                <text><![CDATA[Quantity]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="310" y="0" width="110" height="20"/>
+                <textElement textAlignment="Right"><font isBold="true"/></textElement>
+                <text><![CDATA[Unit Price]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="420" y="0" width="135" height="20"/>
+                <textElement textAlignment="Right"><font isBold="true"/></textElement>
+                <text><![CDATA[Total Price (LKR)]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="70" height="20"/>
+                <textFieldExpression><![CDATA[$F{sale_id}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="70" y="0" width="160" height="20"/>
+                <textFieldExpression><![CDATA[$F{sale_date}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="230" y="0" width="80" height="20"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="310" y="0" width="110" height="20"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[$F{unit_price}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="420" y="0" width="135" height="20"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[$F{total_item_price}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <summary>
+        <band height="30">
+            <staticText>
+                <reportElement x="250" y="5" width="170" height="20"/>
+                <textElement textAlignment="Right"><font size="11" isBold="true"/></textElement>
+                <text><![CDATA[Total Sales Revenue:]]></text>
+            </staticText>
+            <textField pattern="'LKR '#,##0.00">
+                <reportElement x="420" y="5" width="135" height="20"/>
+                <textElement textAlignment="Right"><font size="11" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$V{TOTAL_PRODUCT_SALES}]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>

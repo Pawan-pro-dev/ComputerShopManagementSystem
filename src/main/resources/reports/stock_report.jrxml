@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" 
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" 
+              name="stock_report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+    
+    <queryString>
+        <![CDATA[
+            SELECT 
+                p.product_id,
+                p.product_name,
+                c.category_name,
+                p.buying_price AS unit_price,
+                p.stock_quantity AS quantity,
+                (p.selling_price * p.stock_quantity) AS stock_value
+            FROM product p
+            LEFT JOIN category c ON p.category_id = c.category_id
+            ORDER BY p.product_id ASC
+        ]]>
+    </queryString>
+
+    <field name="product_id" class="java.lang.Integer"/>
+    <field name="product_name" class="java.lang.String"/>
+    <field name="category_name" class="java.lang.String"/>
+    <field name="unit_price" class="java.lang.Double"/>
+    <field name="quantity" class="java.lang.Integer"/>
+    <field name="stock_value" class="java.lang.Double"/>
+
+    <variable name="TOTAL_STOCK_VALUE" class="java.lang.Double" calculation="Sum">
+        <variableExpression><![CDATA[$F{stock_value}]]></variableExpression>
+    </variable>
+
+    <title>
+        <band height="60">
+            <staticText>
+                <reportElement x="0" y="10" width="555" height="30"/>
+                <textElement textAlignment="Center">
+                    <font size="20" isBold="true"/>
+                </textElement>
+                <text><![CDATA[CURRENT STOCK REPORT]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="25">
+            <staticText>
+                <reportElement x="0" y="0" width="40" height="20"/>
+                <textElement><font isBold="true"/></textElement>
+                <text><![CDATA[ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="40" y="0" width="160" height="20"/>
+                <textElement><font isBold="true"/></textElement>
+                <text><![CDATA[Product Name]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="200" y="0" width="110" height="20"/>
+                <textElement><font isBold="true"/></textElement>
+                <text><![CDATA[Category]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="310" y="0" width="70" height="20"/>
+                <textElement textAlignment="Right"><font isBold="true"/></textElement>
+                <text><![CDATA[Price]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="380" y="0" width="60" height="20"/>
+                <textElement textAlignment="Center"><font isBold="true"/></textElement>
+                <text><![CDATA[Quantity]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="440" y="0" width="115" height="20"/>
+                <textElement textAlignment="Right"><font isBold="true"/></textElement>
+                <text><![CDATA[Stock Value (LKR)]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <detail>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="0" width="40" height="20"/>
+                <textFieldExpression><![CDATA[$F{product_id}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="40" y="0" width="160" height="20"/>
+                <textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="200" y="0" width="110" height="20"/>
+                <textFieldExpression><![CDATA[$F{category_name} != null ? $F{category_name} : "N/A"]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="310" y="0" width="70" height="20"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[$F{unit_price}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="380" y="0" width="60" height="20"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="440" y="0" width="115" height="20"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression><![CDATA[$F{stock_value}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <summary>
+        <band height="30">
+            <staticText>
+                <reportElement x="270" y="5" width="170" height="20"/>
+                <textElement textAlignment="Right"><font size="11" isBold="true"/></textElement>
+                <text><![CDATA[Total Inventory Value:]]></text>
+            </staticText>
+            <textField pattern="'LKR '#,##0.00">
+                <reportElement x="440" y="5" width="115" height="20"/>
+                <textElement textAlignment="Right"><font size="11" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$V{TOTAL_STOCK_VALUE}]]></textFieldExpression>
+            </textField>
+        </band>
+    </summary>
+</jasperReport>
