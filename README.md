@@ -27,7 +27,7 @@ customers, suppliers, purchases and sales, with a dashboard and sales reports.
 - Maven
 
 ## How to run
-1. Install MySQL and run `database/setup.sql` (MySQL Workbench: File > Open SQL Script > Run).
+1. Install MySQL and run `database/computer_shop.sql` (MySQL Workbench: File > Open SQL Script > Run).
    This creates the `computer_shop` database with tables and sample data.
 2. Open the project in NetBeans.
 3. Set your MySQL username and password in the database connection class.
@@ -40,4 +40,4 @@ customers, suppliers, purchases and sales, with a dashboard and sales reports.
 ## Project structure
 - `src/` : source code (ui, dao, model)
 - `database/computer_shop.sql` : database setup script
-- `dist/` : runnable JAR (if included)
+- `dist/` : runnable JAR
