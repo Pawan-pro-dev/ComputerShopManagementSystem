@@ -17,7 +17,7 @@ customers, suppliers, purchases and sales, with a dashboard and sales reports.
 - Sales (transaction UI): shopping cart, stock validation, stock update on save
 - Purchases from suppliers
 - Input forms: Category, Product, Customer, Supplier
-- Jasper report: [report එකේ නම, උදා: Daily Sales Report]
+- Jasper report: Daily Sales Report, Monthly Sales Report, Stock Report, Product Sales Report
 - Validations and exception handling
 
 ## Tools
